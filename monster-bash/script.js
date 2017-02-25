@@ -44,8 +44,10 @@ var monsterBash = new Vue({
     },
     heal: function() {
       this.monsterAttack(5)
-      this.playerHeal = this.computeStatus(10,1);
-      this.updateStatus('player',this.playerHeal, 'healed');
+      if (this.playerHp < 100) {
+        this.playerHeal = this.computeStatus(10,1);
+        this.updateStatus('player',this.playerHeal, 'healed');
+      }
     },
     monsterAttack: function(str) {
       this.monsterDmg = this.computeStatus(str);
