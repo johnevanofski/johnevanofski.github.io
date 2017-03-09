@@ -10,7 +10,9 @@ var monsterBash = new Vue({
     playerHeal : 0,
     status : [],
     playerImgState : 'static',
-    monsterImgState : 'static'
+    monsterImgState : 'static',
+    playerPos : 0,
+    monsterPos : 0
   },
   watch: {
     playerHp: function() {
@@ -58,21 +60,28 @@ var monsterBash = new Vue({
       this.updateStatus('monster',this.monsterDmg, 'attacks');
     },
     updateStatus: function(char, str, type) {
+      vm = this
+
       if (type != 'death' && this.playerHp > 0 && this.monsterHp > 0) {
-        // Player
+        // Player Attacks / Heals
         if (char == 'player') {
+
           if (type == 'healed' && (this.playerHp + str) < 100) {
             this.playerHp += str
             this.status.unshift({char:char, str:str, type:type})
           }
-          else if (type != 'healed'){
+          else if (type != 'healed') {
+            this.animateAttack('player')
             this.monsterHp -= str
             this.status.unshift({char:char, str:str, type:type})
           }
-        // Monster
+        // Monster Attacks
         } else {
-          this.playerHp -= str
-          this.status.unshift({char:char, str:str, type:type})
+          setTimeout(function() {
+            vm.animateAttack('monster')
+            vm.playerHp -= str
+            vm.status.unshift({char:char, str:str, type:type})
+          }, 800)
         }
       // Death
       } else {
@@ -101,6 +110,24 @@ var monsterBash = new Vue({
       if (n < 25) return 'danger'
       if (n < 50) return 'warning'
       else return 'success'
+    },
+    animateAttack: function(p) {
+      vm = this
+      if (p == 'player') {
+        vm.playerPos = '30px'
+        vm.monsterImgState = 'hit'
+        setTimeout(function() {
+          vm.playerPos = 0
+          vm.monsterImgState = 'static'
+        }, 600)
+      } else if (p == 'monster') {
+        vm.monsterPos = '-30px'
+        vm.playerImgState = 'hit'
+        setTimeout(function() {
+          vm.monsterPos = 0
+          vm.playerImgState = 'static'
+        }, 600)
+      }
     }
   }
 })

@@ -28,6 +28,11 @@
     .thumbnail { border: none }
     .thumbnail img {
       max-height: 250px;
+      position: relative;
+      transition: all .25s ease-out;
+    }
+    .panel--char {
+      border: none;
     }
   </style>
 </head>
@@ -36,7 +41,7 @@
     <h1 class="text-center">Monster Bash</h1>
     <div class="row">
       <div class="col-sm-6">
-        <div class="panel panel-info">
+        <div class="panel panel-info panel--char">
             <div class="text-center panel-heading"><h2>YOU</h2></div>
             <div class="panel-body">
               <div class="progress">
@@ -45,13 +50,13 @@
                 </div>
               </div>
               <div class="thumbnail">
-                <img :src="'img/player-' + playerImgState + '.png'" class="player">
+                <img :style="{left: playerPos}" :src="'img/player-' + playerImgState + '.png'" class="player char">
               </div>
             </div>
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="panel panel-danger">
+        <div class="panel panel-danger panel--char">
             <div class="text-center panel-heading"><h2>MONSTER</h2></div>
             <div class="panel-body">
               <div class="progress">
@@ -60,7 +65,7 @@
                 </div>
               </div>
               <div class="thumbnail">
-                <img :src="'img/monster-' + monsterImgState + '.png'" class="monster">
+                <img :style="{left: monsterPos}" :src="'img/monster-' + monsterImgState + '.png'" class="monster char">
               </div>
             </div>
         </div>
