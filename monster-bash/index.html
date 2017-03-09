@@ -25,6 +25,10 @@
       max-height: 200px;
       overflow-y: auto;
     }
+    .thumbnail { border: none }
+    .thumbnail img {
+      max-height: 250px;
+    }
   </style>
 </head>
 <body>
@@ -40,6 +44,9 @@
                   {{ playerHp }}
                 </div>
               </div>
+              <div class="thumbnail">
+                <img :src="'img/player-' + playerImgState + '.png'" class="player">
+              </div>
             </div>
         </div>
       </div>
@@ -51,6 +58,9 @@
                 <div class="progress-bar" :class="'progress-bar-' + damageAmount(monsterHp)" :style="{width: monsterHp + '%'}">
                   {{ monsterHp }}
                 </div>
+              </div>
+              <div class="thumbnail">
+                <img :src="'img/monster-' + monsterImgState + '.png'" class="monster">
               </div>
             </div>
         </div>

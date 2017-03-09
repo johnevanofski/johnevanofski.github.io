@@ -2,12 +2,15 @@ var monsterBash = new Vue({
   el: '#app',
   data: {
     gameInit : false,
+    gameActive : false,
     monsterHp : 100,
     playerHp : 100,
     playerDmg : 0,
     monsterDmg : 0,
     playerHeal : 0,
-    status : []
+    status : [],
+    playerImgState : 'static',
+    monsterImgState : 'static'
   },
   watch: {
     playerHp: function() {
@@ -28,9 +31,12 @@ var monsterBash = new Vue({
   methods: {
     startNewGame: function() {
       this.gameInit = !this.gameInit
+      this.gameActive = true
       this.monsterHp = 100
       this.playerHp = 100
       this.status = []
+      this.playerImgState = 'static'
+      this.monsterImgState = 'static'
     },
     attack: function() {
       this.monsterAttack(8)
@@ -40,14 +46,12 @@ var monsterBash = new Vue({
     specialAttack: function() {
       this.monsterAttack(10)
       this.playerDmg = this.computeStatus(8);
-      this.updateStatus('player',this.playerDmg, 'summons fireball');
+      this.updateStatus('player',this.playerDmg, 'summons sun beam!');
     },
     heal: function() {
       this.monsterAttack(5)
-      if (this.playerHp < 100) {
-        this.playerHeal = this.computeStatus(10,1);
-        this.updateStatus('player',this.playerHeal, 'healed');
-      }
+      this.playerHeal = this.computeStatus(10,1);
+      this.updateStatus('player',this.playerHeal, 'healed');
     },
     monsterAttack: function(str) {
       this.monsterDmg = this.computeStatus(str);
@@ -55,18 +59,38 @@ var monsterBash = new Vue({
     },
     updateStatus: function(char, str, type) {
       if (type != 'death' && this.playerHp > 0 && this.monsterHp > 0) {
-        this.status.unshift({char:char, str:str, type:type})
+        // Player
         if (char == 'player') {
-          if (type == 'healed') this.playerHp += str
-          else this.monsterHp -= str
+          if (type == 'healed' && (this.playerHp + str) < 100) {
+            this.playerHp += str
+            this.status.unshift({char:char, str:str, type:type})
+          }
+          else if (type != 'healed'){
+            this.monsterHp -= str
+            this.status.unshift({char:char, str:str, type:type})
+          }
+        // Monster
         } else {
           this.playerHp -= str
+          this.status.unshift({char:char, str:str, type:type})
         }
+      // Death
       } else {
         var dead = '';
-        if (this.playerHp > 0) dead = 'monster'
-        else dead = 'player'
-        this.status.unshift({char:dead, str:str, type:'death'})
+        if (this.playerHp > 0) {
+          dead = 'monster'
+          this.monsterImgState = 'dead'
+          this.monsterHp = 0
+        }
+        else {
+          dead = 'player'
+          this.playerImgState = 'dead'
+          this.playerHp = 0
+        }
+        if (this.gameActive) {
+          this.status.unshift({char:dead, str:str, type:'death'})
+          this.gameActive = false
+        }
       }
     },
     computeStatus: function(n, min) {

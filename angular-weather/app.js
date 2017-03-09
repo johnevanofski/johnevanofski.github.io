@@ -2,7 +2,7 @@
 
 // API Key
 var apiKey = '2a194e1e46c9509c013da051e3d692e6',
-		apiUrl = '//api.openweathermap.org/data/2.5/forecast/daily';
+		apiUrl = 'http://api.openweathermap.org/data/2.5/forecast/daily';
 
 //CREATE THE MODULE FOR THE APP
 var weatherApp = angular.module('weatherApp', ['ngRoute', 'ngResource']);
