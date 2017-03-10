@@ -71,14 +71,14 @@ var monsterBash = new Vue({
             this.status.unshift({char:char, str:str, type:type})
           }
           else if (type != 'healed') {
-            this.animateAttack('player')
+            if (str > 0 ) this.animateAttack('player')
             this.monsterHp -= str
             this.status.unshift({char:char, str:str, type:type})
           }
         // Monster Attacks
         } else {
           setTimeout(function() {
-            vm.animateAttack('monster')
+            if (str > 0 ) vm.animateAttack('monster')
             vm.playerHp -= str
             vm.status.unshift({char:char, str:str, type:type})
           }, 800)
